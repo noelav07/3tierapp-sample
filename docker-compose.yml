@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "3200:3200"
+    environment:
+      - PORT=3200
+      - AWS_REGION=ap-south-1
+      # Note: For local testing, ensure your AWS credentials are available via 
+      # environment variables or by mounting ~/.aws
+      # - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      # - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # For local docker-compose, this points to the backend service name
+        - VITE_API_URL=http://localhost:3200/api
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
