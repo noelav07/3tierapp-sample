@@ -9,7 +9,8 @@ BooksController.prototype.get = async (req, res) => {
    try {
       db.query(getQuery, (err, books) => {
          if (err) {
-            throw new Error("Error executing query.");
+            console.error(err);
+            return res.status(500).json({ message: "Error executing query." });
          }
 
          res.status(200).json({
@@ -43,12 +44,14 @@ BooksController.prototype.create = async (req, res) => {
       db.query('INSERT INTO book (title, releaseDate, description, pages, authorId, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)', [
          title, new Date(releaseDate), description, pages, authorId, new Date(), new Date()], (err) => {
             if (err) {
-               throw new Error("Error executing query.", err);
+               console.error(err);
+               return res.status(500).json({ message: "Error executing query." });
             }
 
             db.query(getQuery, (err, books) => {
                if (err) {
-                  throw new Error("Error executing query.");
+                  console.error(err);
+                  return res.status(500).json({ message: "Error executing query." });
                }
 
                return res.status(200).json({
@@ -80,13 +83,14 @@ BooksController.prototype.update = async (req, res) => {
       db.query('UPDATE book SET title = ?, releaseDate = ?, description = ?, pages = ?, authorId = ?, updatedAt = CURRENT_TIMESTAMP WHERE id = ?', [
          title, new Date(releaseDate), description, pages, authorId, bookId], (err) => {
             if (err) {
-               console.log(err);
-               throw new Error("Error executing query.");
+               console.error(err);
+               return res.status(500).json({ message: "Error executing query." });
             }
 
             db.query(getQuery, (err, books) => {
                if (err) {
-                  throw new Error("Error executing query.");
+                  console.error(err);
+                  return res.status(500).json({ message: "Error executing query." });
                }
 
                return res.status(200).json({
@@ -110,12 +114,14 @@ BooksController.prototype.delete = async (req, res) => {
 
       db.query('DELETE FROM book WHERE id = ?', [bookId], (err) => {
          if (err) {
-            throw new Error("Error executing query.");
+            console.error(err);
+            return res.status(500).json({ message: "Error executing query." });
          }
 
          db.query(getQuery, (err, books) => {
             if (err) {
-               throw new Error("Error executing query.");
+               console.error(err);
+               return res.status(500).json({ message: "Error executing query." });
             }
 
             return res.status(200).json({

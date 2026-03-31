@@ -8,7 +8,8 @@ AuthorsController.prototype.get = async (req, res) => {
    try {
       db.query(getQuery, (err, authors) => {
          if (err) {
-            throw new Error("Error executing query.");
+            console.error(err);
+            return res.status(500).json({ message: "Error executing query." });
          }
 
          res.status(200).json({
@@ -36,13 +37,14 @@ AuthorsController.prototype.create = async (req, res) => {
       db.query('INSERT INTO author (name, birthday, bio, createdAt, updatedAt) VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)', [
          name, new Date(birthday), bio], (err) => {
             if (err) {
-               console.log(err);
-               throw new Error("Error executing query.");
+               console.error(err);
+               return res.status(500).json({ message: "Error executing query." });
             }
 
             db.query(getQuery, (err, authors) => {
                if (err) {
-                  throw new Error("Error executing query.");
+                  console.error(err);
+                  return res.status(500).json({ message: "Error executing query." });
                }
 
                return res.status(200).json({
@@ -68,13 +70,14 @@ AuthorsController.prototype.update = async (req, res) => {
       db.query(`UPDATE author SET name = ?, birthday = ?, bio = ?, updatedAt = CURRENT_TIMESTAMP WHERE id = ?`, [
          name, new Date(birthday), bio, authorId], (err) => {
             if (err) {
-               console.log(err);
-               throw new Error("Error executing query.");
+               console.error(err);
+               return res.status(500).json({ message: "Error executing query." });
             }
 
             db.query(getQuery, (err, authors) => {
                if (err) {
-                  throw new Error("Error executing query.");
+                  console.error(err);
+                  return res.status(500).json({ message: "Error executing query." });
                }
 
                return res.status(200).json({
@@ -98,12 +101,14 @@ AuthorsController.prototype.delete = async (req, res) => {
 
       db.query('DELETE FROM author WHERE id = ?', [authorId], (err, result) => {
          if (err) {
-            throw new Error("Error executing query.");
+            console.error(err);
+            return res.status(500).json({ message: "Error executing query." });
          }
 
          db.query(getQuery, (err, authors) => {
             if (err) {
-               throw new Error("Error executing query.");
+               console.error(err);
+               return res.status(500).json({ message: "Error executing query." });
             }
 
             return res.status(200).json({
