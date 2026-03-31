@@ -17,5 +17,10 @@ do
   fi
 done
 
+if [ -f /etc/nginx/conf.d/default.conf ]; then
+  echo "Configuring Nginx reverse proxy..."
+  sed -i "s|__BACKEND_URL__|${BACKEND_URL:-http://localhost:3200/api/}|g" /etc/nginx/conf.d/default.conf
+fi
+
 echo "Starting Nginx..."
 exec "$@"
