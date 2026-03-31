@@ -24,7 +24,7 @@ async function initDB() {
 
         pool = mysql.createPool({
             host: credentials.host,
-            user: credentials.username,
+            user: credentials.username || credentials.user || 'dbadmin',
             password: credentials.password,
             database: credentials.dbname || credentials.database || 'react_node_app',
             port: credentials.port || 3306,
